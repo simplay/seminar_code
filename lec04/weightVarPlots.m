@@ -20,7 +20,7 @@ w0_hat = zeros(1,n,2); w1_hat = zeros(1,n,2); p0 = zeros(1,n,2); p1 = zeros(1,n,
 idx = 1;
 for sigma = sigmas,
     for k=1:N,
-        [res, weights, probs] = integrate(sigma, n);
+        [res, weights, probs] = integrate(sigma, n, 0);
         r0(k) = res(1); r1(k) = res(2); r2(k) = res(3);
         w0_hat = weights(:,:,1); w1_hat = weights(:,:,2);
         p0 = probs(:,:,1); p1 = probs(:,:,2);

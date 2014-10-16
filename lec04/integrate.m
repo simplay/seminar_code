@@ -1,10 +1,7 @@
-function [ res, weights, probs ] = integrate( sigma, n )
-res = zeros(1,3);
-weights = zeros(1,n,2);
-probs = zeros(1,n,2);
-
+function [ res, weights, probs ] = integrate( sigma, n, shouldShowPlot )
 %INTEGRATE Summary of this function goes here
 %   Detailed explanation goes here
+% shouldShowPlot show plots of this integration
 
 % Parameters for the model setup
 
@@ -18,8 +15,9 @@ probs = zeros(1,n,2);
 %
 % Note: the light geometry implies L(w)=1 for 0<w<pi/4, and 0 otherwise.
 
-% Number of samples
-
+res = zeros(1,3);
+weights = zeros(1,n,2);
+probs = zeros(1,n,2);
 
 % Parameters of BRDF
 mu = pi/4; % Mean, you should not change this
@@ -91,6 +89,21 @@ res(3) = r;
 
 weights(:,:,1) = w0_hat;
 weights(:,:,2) = w1_hat;
+
+if(shouldShowPlot == 1),
+figure
+hold on
+line([-1 0],[1 0], 'Color','b')
+line([0 1],[1 1], 'Color','c')
+plot(sin(w),cos(w),'.');
+plot(sin(w).*f,cos(w).*f,'.red')
+plot(sin(w).*brdf,cos(w).*brdf,'.green')
+axis([0 2 0 2]);
+axis equal
+legend('viewing direction','light source','sample directions','sample values (shown as distance to origin)','brdf values (shown as distance to origin)')
+t = sprintf('Monte Carlo estimate r=%f', r);
+title(t)
+end
 
 end
 
