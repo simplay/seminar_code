@@ -41,6 +41,7 @@ probs(:,:,1) = p0;
 w0 =w;
 % BRDF values
 brdf = p;
+brdf0 = brdf;
 
 % The light is defined to be in the range of angles [0,pi/4]
 % Since the pdf of the samples corresponds to the sample values, after
@@ -72,7 +73,7 @@ p1 = p;
 probs(:,:,2) = p1;
 % BRDF values
 brdf = gaussSampleProbabilities(w, mu, sigma, -pi/2, pi/2);
-
+brdf1 = brdf;
 % Sample values, BRDF divided by probability densities
 f = brdf./p;
 f1 = f;
@@ -91,18 +92,37 @@ weights(:,:,1) = w0_hat;
 weights(:,:,2) = w1_hat;
 
 if(shouldShowPlot == 1),
-figure
-hold on
-line([-1 0],[1 0], 'Color','b')
-line([0 1],[1 1], 'Color','c')
-plot(sin(w),cos(w),'.');
-plot(sin(w).*f,cos(w).*f,'.red')
-plot(sin(w).*brdf,cos(w).*brdf,'.green')
-axis([0 2 0 2]);
-axis equal
-legend('viewing direction','light source','sample directions','sample values (shown as distance to origin)','brdf values (shown as distance to origin)')
-t = sprintf('Monte Carlo estimate r=%f', r);
-title(t)
+    figure
+    hold on
+    
+    % sampling the brdf
+    line([-1 0],[1 0], 'Color','b')
+    line([0 1],[1 1], 'Color','c')
+    plot(sin(w0),cos(w0),'.');
+    plot(sin(w0).*f0,cos(w0).*f0,'.red')
+    plot(sin(w0).*brdf0,cos(w0).*brdf0,'.green')
+    axis([0 2 0 2]);
+    axis equal
+    legend('viewing direction','light source','sample directions','sample values (shown as distance to origin)','brdf values (shown as distance to origin)')
+    t = sprintf('Sampling BRDF: Monte Carlo estimate r=%f', r);
+    title(t)
+    hold off
+    
+    
+    figure
+    hold on
+    % sampling the light source
+    line([-1 0],[1 0], 'Color','b')
+    line([0 1],[1 1], 'Color','c')
+    plot(sin(w1),cos(w1),'.');
+    plot(sin(w1).*f1,cos(w1).*f1,'.red')
+    plot(sin(w1).*brdf1,cos(w1).*brdf1,'.green')
+    axis([0 2 0 2]);
+    axis equal
+    legend('viewing direction','light source','sample directions','sample values (shown as distance to origin)','brdf values (shown as distance to origin)')
+    t = sprintf('Sampling Lightsource: Monte Carlo estimate r=%f', r);
+    title(t)
+    hold off
 end
 
 end
